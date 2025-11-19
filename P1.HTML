@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UTZAC Conecta</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --primary: #0f766e;
+      --primary-dark: #0d5a52;
+      --primary-light: #14b8a6;
+      --secondary: #f59e0b;
+      --accent: #ec4899;
+      --neutral: #f8fafc;
+      --neutral-dark: #64748b;
+      --neutral-darker: #334155;
+      --white: #ffffff;
+      --shadow: rgba(0, 0, 0, 0.1);
+      --shadow-hover: rgba(0, 0, 0, 0.15);
+      --gradient: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      --border-radius: 12px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+      color: var(--neutral-darker);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      background: var(--gradient);
+      color: var(--white);
+      text-align: center;
+      padding: 40px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+      opacity: 0.3;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 3em;
+      font-weight: 700;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+    }
+
+    header p {
+      margin-top: 10px;
+      font-size: 1.2em;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 300;
+      position: relative;
+      z-index: 1;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      background: var(--white);
+      padding: 20px;
+      box-shadow: 0 4px 6px var(--shadow);
+      border-radius: 0 0 var(--border-radius) var(--border-radius);
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    nav button {
+      background: var(--neutral);
+      border: 2px solid transparent;
+      color: var(--neutral-darker);
+      padding: 12px 24px;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 500;
+      font-size: 0.95em;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    nav button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    nav button:hover::before {
+      left: 100%;
+    }
+
+    nav button.active,
+    nav button:hover {
+      background: var(--gradient);
+      color: var(--white);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(15, 118, 110, 0.3);
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 0 auto 40px;
+      padding: 0 20px;
+    }
+
+    section {
+      display: none;
+      animation: slideIn 0.5s ease-out;
+      background: var(--white);
+      border-radius: var(--border-radius);
+      padding: 30px;
+      box-shadow: 0 10px 25px var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    section.active {
+      display: block;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    h2 {
+      color: var(--primary);
+      font-size: 1.8em;
+      font-weight: 600;
+      margin-bottom: 25px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 4px;
+      background: var(--gradient);
+      border-radius: 2px;
+    }
+
+    form {
+      display: grid;
+      gap: 20px;
+      margin-bottom: 30px;
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 768px) {
+      form {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      }
+    }
+
+    input, textarea, select {
+      padding: 15px 18px;
+      border: 2px solid #e2e8f0;
+      border-radius: var(--border-radius);
+      font-size: 1em;
+      width: 100%;
+      transition: var(--transition);
+      background: var(--white);
+      color: var(--neutral-darker);
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+      transform: translateY(-1px);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    button.enviar {
+      background: var(--gradient);
+      color: var(--white);
+      border: none;
+      padding: 15px 30px;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-size: 1.1em;
+      font-weight: 600;
+      transition: var(--transition);
+      box-shadow: 0 4px 15px rgba(15, 118, 110, 0.3);
+      grid-column: 1 / -1;
+      justify-self: center;
+      min-width: 200px;
+    }
+
+    button.enviar:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(15, 118, 110, 0.4);
+    }
+
+    button.enviar:active {
+      transform: translateY(0);
+    }
+
+    .card {
+      background: var(--neutral);
+      padding: 20px;
+      border-radius: var(--border-radius);
+      margin: 15px 0;
+      border-left: 4px solid var(--primary);
+      box-shadow: 0 4px 12px var(--shadow);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient);
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px var(--shadow-hover);
+    }
+
+    .card.opinion {
+      border-left-color: var(--accent);
+    }
+
+    .card.opinion::before {
+      background: linear-gradient(135deg, var(--accent) 0%, #f97316 100%);
+    }
+
+    .card.ayuda {
+      border-left-color: var(--secondary);
+    }
+
+    .card.ayuda::before {
+      background: linear-gradient(135deg, var(--secondary) 0%, #eab308 100%);
+    }
+
+    .replies {
+      margin-top: 15px;
+      padding-left: 15px;
+      border-left: 3px solid #e2e8f0;
+    }
+
+    .reply {
+      background: #f8fafc;
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin: 8px 0;
+      font-size: 0.95em;
+      border: 1px solid #e2e8f0;
+    }
+
+    .reply-form {
+      margin-top: 15px;
+      padding: 15px;
+      background: #f8fafc;
+      border-radius: var(--border-radius);
+      border: 1px solid #e2e8f0;
+    }
+
+    .reply-form input,
+    .reply-form textarea {
+      margin-bottom: 10px;
+      border: 1px solid #cbd5e1;
+    }
+
+    .reply-form button {
+      background: var(--secondary);
+      color: var(--white);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9em;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .reply-form button:hover {
+      background: #d97706;
+      transform: translateY(-1px);
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      color: var(--neutral-dark);
+      font-size: 0.9em;
+      background: var(--white);
+      border-radius: var(--border-radius) var(--border-radius) 0 0;
+      box-shadow: 0 -4px 6px var(--shadow);
+    }
+
+    #qr-container {
+      margin: 20px 0;
+    }
+
+    #qrcode {
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2.2em;
+      }
+
+      nav {
+        padding: 15px;
+        gap: 10px;
+      }
+
+      nav button {
+        padding: 10px 16px;
+        font-size: 0.9em;
+      }
+
+      section {
+        padding: 20px;
+      }
+
+      .card {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>UTZAC Conecta</h1>
+    <p>Opiniones y ayuda entre estudiantes</p>
+  </header>
+
+  <nav>
+    <button class="active" data-tab="comentarios">💬 Opiniones Anónimas</button>
+    <button data-tab="ayuda">🤝 Ayuda entre Estudiantes</button>
+    <button data-tab="opiniones-publicas">🌍 Opiniones Públicas</button>
+    <button data-tab="ayuda-publica">🤝 Ayuda Pública</button>
+  </nav>
+
+  <main>
+    <!-- Sección de comentarios -->
+    <section id="comentarios" class="active">
+      <h2>Deja una opinión anónima</h2>
+      <form>
+        <input type="text" placeholder="Materia (Ej: Cálculo Diferencial)" required>
+        <input type="text" placeholder="Nombre del maestro" required>
+        <select>
+          <option value="">Calificación (opcional)</option>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select>
+        <textarea rows="4" placeholder="Escribe tu opinión de forma respetuosa..." required></textarea>
+        <button type="submit" class="enviar">Publicar</button>
+      </form>
+    </section>
+
+    <!-- Sección de ayuda entre estudiantes -->
+    <section id="ayuda">
+      <h2>Publica o busca ayuda</h2>
+      <form>
+        <input type="text" placeholder="Nombre" required>
+        <input type="email" placeholder="Correo electrónico" required>
+        <input type="tel" placeholder="Teléfono (opcional)">
+        <input type="text" placeholder="Materia (Ej: Física)">
+        <input type="text" placeholder="Tema o título">
+        <input type="text" placeholder="¿Qué ofreces a cambio? (opcional)">
+        <textarea rows="4" placeholder="Describe en qué necesitas ayuda..."></textarea>
+        <button type="submit" class="enviar">Publicar</button>
+      </form>
+    </section>
+
+    <!-- Sección de opiniones públicas -->
+    <section id="opiniones-publicas">
+      <h2>Opiniones Públicas</h2>
+      <div id="opiniones-publicas-container">
+        <!-- Las opiniones se cargarán aquí -->
+      </div>
+    </section>
+
+    <!-- Sección de ayuda pública -->
+    <section id="ayuda-publica">
+      <h2>Ayuda Pública</h2>
+      <div id="ayuda-publica-container">
+        <!-- La ayuda se cargará aquí -->
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div id="qr-container" style="margin: 10px 0;">
+      <p>Escanea el QR para acceder a la página:</p>
+      <div id="qrcode"></div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    // Cambiar entre pestañas
+    const botones = document.querySelectorAll('nav button');
+    const secciones = document.querySelectorAll('section');
+
+    botones.forEach(btn => {
+      btn.addEventListener('click', () => {
+        botones.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const tab = btn.dataset.tab;
+        secciones.forEach(sec => sec.classList.remove('active'));
+        document.getElementById(tab).classList.add('active');
+      });
+    });
+
+    // Función para guardar publicaciones en localStorage
+    function savePublicacion(type, data) {
+      const publicaciones = JSON.parse(localStorage.getItem('publicaciones')) || [];
+      publicaciones.push({ type, data, timestamp: Date.now() });
+      localStorage.setItem('publicaciones', JSON.stringify(publicaciones));
+      loadOpinionesPublicas();
+      loadAyudaPublica();
+    }
+
+    // Función para cargar y mostrar opiniones públicas (sin respuestas)
+    function loadOpinionesPublicas() {
+      const container = document.getElementById('opiniones-publicas-container');
+      container.innerHTML = '';
+      const publicaciones = JSON.parse(localStorage.getItem('publicaciones')) || [];
+      publicaciones.filter(pub => pub.type === 'opinion').forEach(pub => {
+        const card = document.createElement('div');
+        card.className = `card ${pub.type}`;
+        let stars = '';
+        if (pub.data.calif) {
+          for (let i = 0; i < 5; i++) {
+            stars += i < parseInt(pub.data.calif) ? '⭐' : '☆';
+          }
+          stars = '<br>' + stars;
+        }
+        card.innerHTML = `<strong>Materia:</strong> ${pub.data.materia}<br><strong>Maestro:</strong> ${pub.data.maestro}${stars}<br>“${pub.data.opinion}”`;
+        container.appendChild(card);
+      });
+    }
+
+    // Función para cargar y mostrar ayuda pública (con respuestas)
+    function loadAyudaPublica() {
+      const container = document.getElementById('ayuda-publica-container');
+      container.innerHTML = '';
+      const publicaciones = JSON.parse(localStorage.getItem('publicaciones')) || [];
+      publicaciones.filter(pub => pub.type === 'ayuda').forEach((pub, index) => {
+        const card = document.createElement('div');
+        card.className = `card ${pub.type}`;
+        card.innerHTML = `<strong>Nombre:</strong> ${pub.data.nombre}<br><strong>Correo:</strong> ${pub.data.correo}<br><strong>Teléfono:</strong> ${pub.data.telefono || 'N/A'}<br><strong>Materia:</strong> ${pub.data.materia}<br><strong>Necesita ayuda en:</strong> ${pub.data.tema}<br>“${pub.data.descripcion}”<br><strong>Ofrece a cambio:</strong> ${pub.data.oferta || 'Nada'}`;
+
+        // Agregar sección de respuestas
+        const repliesContainer = document.createElement('div');
+        repliesContainer.className = 'replies';
+        repliesContainer.id = `replies-${index}`;
+        pub.replies = pub.replies || [];
+        pub.replies.forEach(reply => {
+          const replyDiv = document.createElement('div');
+          replyDiv.className = 'reply';
+          replyDiv.innerHTML = `<strong>${reply.nombre}:</strong> ${reply.respuesta}`;
+          repliesContainer.appendChild(replyDiv);
+        });
+
+        const replyForm = document.createElement('form');
+        replyForm.className = 'reply-form';
+        replyForm.innerHTML = `
+          <input type="text" placeholder="Tu nombre" required>
+          <textarea rows="2" placeholder="Escribe tu respuesta..." required></textarea>
+          <button type="submit">Responder</button>
+        `;
+        replyForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const inputs = replyForm.querySelectorAll('input, textarea');
+          const nombre = inputs[0].value;
+          const respuesta = inputs[1].value;
+          pub.replies.push({ nombre, respuesta });
+          localStorage.setItem('publicaciones', JSON.stringify(publicaciones));
+          loadAyudaPublica();
+        });
+
+        card.appendChild(repliesContainer);
+        card.appendChild(replyForm);
+        container.appendChild(card);
+      });
+    }
+
+    // Form comentarios
+    const formComentarios = document.querySelector('#comentarios form');
+    formComentarios.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const inputs = formComentarios.querySelectorAll('input, select, textarea');
+      const materia = inputs[0].value;
+      const maestro = inputs[1].value;
+      const calif = inputs[2].value;
+      const opinion = inputs[3].value;
+      let stars = '';
+      if (calif) {
+        for (let i = 0; i < 5; i++) {
+          stars += i < parseInt(calif) ? '⭐' : '☆';
+        }
+        stars = '<br>' + stars;
+      }
+      const card = document.createElement('div');
+      card.className = 'card opinion';
+      card.innerHTML = `<strong>Materia:</strong> ${materia}<br><strong>Maestro:</strong> ${maestro}${stars}<br>“${opinion}”`;
+      document.querySelector('#comentarios').appendChild(card);
+      savePublicacion('opinion', { materia, maestro, calif, opinion });
+      formComentarios.reset();
+    });
+
+    // Form ayuda
+    const formAyuda = document.querySelector('#ayuda form');
+    formAyuda.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const inputs = formAyuda.querySelectorAll('input, textarea');
+      const nombre = inputs[0].value;
+      const correo = inputs[1].value;
+      const telefono = inputs[2].value;
+      const materia = inputs[3].value;
+      const tema = inputs[4].value;
+      const oferta = inputs[5].value;
+      const descripcion = inputs[6].value;
+      const card = document.createElement('div');
+      card.className = 'card ayuda';
+      card.innerHTML = `<strong>Nombre:</strong> ${nombre}<br><strong>Correo:</strong> ${correo}<br><strong>Teléfono:</strong> ${telefono || 'N/A'}<br><strong>Materia:</strong> ${materia}<br><strong>Necesita ayuda en:</strong> ${tema}<br>“${descripcion}”<br><strong>Ofrece a cambio:</strong> ${oferta || 'Nada'}`;
+      document.querySelector('#ayuda').appendChild(card);
+      savePublicacion('ayuda', { nombre, correo, telefono, materia, tema, oferta, descripcion });
+      formAyuda.reset();
+    });
+
+    // Cargar publicaciones al iniciar la página
+    loadOpinionesPublicas();
+    loadAyudaPublica();
+
+    // Generar QR
+    const qrCode = new QRCode(document.getElementById("qrcode"), {
+      text: window.location.href,
+      width: 128,
+      height: 128,
+    });
+  </script>
+
+</body>
+</html>
